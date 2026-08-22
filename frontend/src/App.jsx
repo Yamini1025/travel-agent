@@ -47,6 +47,12 @@ function App() {
     setIsFormOpen(false);
   }
 
+  const handleDelete = (tripId) => {
+    setTrips((currentTrips) =>
+      currentTrips.filter((trip) => trip.id !== tripId)
+    )
+  }
+
   return (
     <main className="app-shell">
       <section className="workspace">
@@ -57,8 +63,7 @@ function App() {
               My <span>Itineraries</span>
             </h1>
             <p className="subtitle">
-              Manage your upcoming journeys, relive past adventures, and tweak
-              AI-generated travel plans.
+              Manage your upcoming journeys!
             </p>
           </div>
         </div>
@@ -73,10 +78,10 @@ function App() {
             onClick={() => setIsFormOpen(true)}
           >
             <span className="plus">+</span>
-            <strong>Plan a New Journey</strong>
+            <strong>Plan Your Next Adventure</strong>
           </button>
           {trips.map((trip) => (
-            <TripCard trip={trip} key={trip.id} />
+            <TripCard trip={trip} key={trip.id} onDelete={handleDelete}/>
           ))}
         </div>
       </section>
