@@ -27,6 +27,11 @@ function TripForm({ onSubmit, onClose }) {
     setForm(initialForm);
   }
 
+  function handleClear(e) {
+    e.preventDefault();
+    setForm(initialForm);
+  }
+
   return (
     <div
       className="modal-backdrop"
@@ -133,8 +138,8 @@ function TripForm({ onSubmit, onClose }) {
           </label>
         </div>
         <div className="form-actions">
-          <button type="button" className="secondary-button" onClick={onClose}>
-            Cancel
+          <button type="button" className="secondary-button" onClick={handleClear}>
+            Clear Form
           </button>
           <button className="primary-button" type="submit">
             ✦ Enter
