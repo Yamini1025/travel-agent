@@ -141,6 +141,70 @@ button {
 	transition: transform 0.2s, box-shadow 0.2s;
 }
 
+.itinerary-popup {
+	position: fixed;
+  	inset: 0;
+  	background: rgba(0, 0, 0, 0.5);
+  	display: flex;
+  	justify-content: center;
+  	align-items: center;
+  	z-index: 1000;
+}
+
+.itinerary-content {
+  	position: relative;
+  	background: white;
+  	width: 90%;
+  	max-width: 700px;
+  	max-height: 80vh;
+  	overflow-y: auto;
+	border-radius: 16px;
+	padding: 32px;
+}
+
+.popup-close {
+	position: absolute;
+  	top: 12px;
+  	right: 16px;
+  	border: none;
+  	background: none;
+  	font-size: 28px;
+  	cursor: pointer;
+}
+
+.loading-state {
+	text-align: center;
+  	padding: 60px 20px;
+}
+
+.itinerary-day {
+  margin-top: 24px;
+}
+
+.itinerary-day ul {
+  padding-left: 20px;
+}
+
+.itinerary-day li {
+  margin-bottom: 8px;
+}
+
+.delete-button {
+  padding: 8px 12px;
+  border-radius: 18px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #c0392b;
+  border-color: #c0392b;
+  background: #fff5f4;
+}
+
+.delete-button:hover {
+  color: #690e04;
+  border-color: #690e04;
+  background: #deadaa;
+}
+
 .trip-card:hover {
 	transform: translateY(-4px);
 	box-shadow: 0 16px 32px #414b7d18;

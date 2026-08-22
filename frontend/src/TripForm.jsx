@@ -85,7 +85,7 @@ function TripForm({ onSubmit, onClose }) {
             <input
               name="adults"
               type="number"
-              min="1"
+              min="0"
               value={form.adults}
               onChange={handleChange}
               placeholder="Number of adults"
@@ -102,6 +102,7 @@ function TripForm({ onSubmit, onClose }) {
               value={form.children}
               onChange={handleChange}
               placeholder="Number of children"
+              required
             />
           </label>
           <label>
