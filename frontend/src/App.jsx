@@ -30,21 +30,54 @@ function App() {
     localStorage.setItem('trips', JSON.stringify(trips))
   }, [trips]);
 
-  const addTrip = (form) => {
-    const destination = form.destination.trim();
-    const dates = formatTripDates(form.startDate, form.endDate);
+  const addTrip = async (form) => {
+    try {
+      const response = await fetch('http://localhost:8000/api/trips', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          destination: form.destination,
+          start_date: form.startDate,
+          end_date: form.endDate,
+          adults: Number(form.adults),
+          children: Number(form.children),
+          budget: form.budget,
+          interests: form.interests
+            .split(',')
+            .map((interest) => interest.trim())
+            .filter(Boolean),
+          preferences: form.preferences,
+        }),
+      });
 
-    setTrips([
-      {
-        ...form,
-        id: `${destination}-${Date.now()}`,
-        title: destination,
-        dates,
-      },
-      ...trips,
-    ]);
+      if (!response.ok) {
+        throw new Error('Failed to create trip');
+      }
 
-    setIsFormOpen(false);
+      const data = await response.json();
+
+      console.log('Backend response:', data);
+
+      const destination = form.destination.trim();
+      const dates = formatTripDates(form.startDate, form.endDate);
+
+      setTrips((currentTrips) => [
+        {
+          ...form,
+          id: `${destination}-${Date.now()}`,
+          title: destination,
+          dates,
+        },
+        ...currentTrips,
+      ]);
+
+      setIsFormOpen(false);
+
+    } catch (error) {
+      console.error('Error creating trip:', error);
+    }
   }
 
   const handleDelete = (tripId) => {
