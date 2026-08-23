@@ -46,7 +46,7 @@ def test_restaurants():
 
 @app.get("/api/test-flights")
 def test_flights():
-    return search_flights("LGB", "2026-10-10")
+    return search_flights("LGB", "2026-10-10", "2026-10-15")
 
 app.add_middleware(
     CORSMiddleware,

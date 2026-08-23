@@ -7,13 +7,14 @@ load_dotenv()
 SERPAPI_KEY = os.getenv("SERPAPI_KEY")
 
 
-def search_flights(destination, start_date):
+def search_flights(destination, start_date, end_date):
     results = serpapi.search({
         "engine": "google_flights",
         "departure_id": "SFO",
         "arrival_id": destination,
         "type" : "1",
         "outbound_date": start_date,
+        "return_date": end_date,
         "api_key": SERPAPI_KEY,
     })
 
