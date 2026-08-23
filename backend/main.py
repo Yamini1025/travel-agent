@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import List
 from fastapi.middleware.cors import CORSMiddleware
+from serpapi_client import search_google
 
 
 app = FastAPI()
@@ -23,6 +24,11 @@ def create_trip(trip: TripRequest):
         "success": True,
         "trip": trip
     }
+
+@app.get("/api/test-search")
+def test_search():
+    results = search_google("best hotels in Tokyo")
+    return results
 
 app.add_middleware(
     CORSMiddleware,
