@@ -30,17 +30,23 @@ def create_trip(trip: TripRequest):
         "trip": trip
     }
 
-@app.get("/api/test-searches")
-def test_searches():
-    return {
-        "hotels": search_hotels("Tokyo", "2026-10-10", "2026-10-15"),
-        "attractions": search_attractions("Tokyo", "anime, food"),
-        "restaurants": search_restaurants("Tokyo", "anime, food")
-    }
+@app.get("/api/test-hotels")
+def test_hotels():
+    return search_hotels("Anaheim, Disneyland", "2026-10-10", "2026-10-15")
+
+
+@app.get("/api/test-attractions")
+def test_attractions():
+    return search_attractions("Anaheim, Disneyland")
+
+
+@app.get("/api/test-restaurants")
+def test_restaurants():
+    return search_restaurants("Anaheim, Disneyland", "vegetarian")
 
 @app.get("/api/test-flights")
 def test_flights():
-    return search_flights("TYO", "2026-10-10")
+    return search_flights("LGB", "2026-10-10")
 
 app.add_middleware(
     CORSMiddleware,
