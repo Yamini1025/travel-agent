@@ -7,9 +7,41 @@ load_dotenv()
 SERPAPI_KEY = os.getenv("SERPAPI_KEY")
 
 
-def search_google(query):
-    if not SERPAPI_KEY:
-        raise ValueError("SERPAPI_KEY is not set")
+def search_flights(destination, start_date):
+    results = serpapi.search({
+        "engine": "google_flights",
+        "departure_id": "SFO",
+        "arrival_id": destination,
+        "outbound_date": start_date,
+        "api_key": SERPAPI_KEY,
+    })
+
+    return results
+
+def search_hotels(destination, start_date, end_date):
+    results = serpapi.search({
+        "engine": "google_hotels",
+        "q": destination,
+        "check_in_date": start_date,
+        "check_out_date": end_date,
+        "api_key": SERPAPI_KEY,
+    })
+
+    return results
+
+def search_attractions(destination, interests):
+    query = f"best attractions in {destination} {interests}"
+
+    results = serpapi.search({
+        "engine": "google",
+        "q": query,
+        "api_key": SERPAPI_KEY,
+    })
+
+    return results
+
+def search_restaurants(destination, interests):
+    query = f"best restaurants in {destination} {interests}"
 
     results = serpapi.search({
         "engine": "google",
