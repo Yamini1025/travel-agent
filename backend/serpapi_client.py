@@ -12,6 +12,7 @@ def search_flights(destination, start_date):
         "engine": "google_flights",
         "departure_id": "SFO",
         "arrival_id": destination,
+        "type" : "1",
         "outbound_date": start_date,
         "api_key": SERPAPI_KEY,
     })
