@@ -33,7 +33,7 @@ def search_attractions(destination, interests):
     query = f"best attractions in {destination} {interests}"
 
     results = serpapi.search({
-        "engine": "google",
+        "engine": "google_local",
         "q": query,
         "api_key": SERPAPI_KEY,
     })
@@ -44,7 +44,7 @@ def search_restaurants(destination, interests):
     query = f"best restaurants in {destination} {interests}"
 
     results = serpapi.search({
-        "engine": "google",
+        "engine": "google_local",
         "q": query,
         "api_key": SERPAPI_KEY,
     })
