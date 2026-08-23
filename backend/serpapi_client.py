@@ -30,7 +30,10 @@ def search_hotels(destination, start_date, end_date):
     return results
 
 def search_attractions(destination, interests):
-    query = f"best attractions in {destination} {interests}"
+    if interests :
+        query = f"best attractions in {destination} {interests}"
+    else :
+        query = f"best attractions in {destination}"
 
     results = serpapi.search({
         "engine": "google_local",
