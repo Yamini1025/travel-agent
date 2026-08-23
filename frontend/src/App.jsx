@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import './App.css'
-import TripCard from './TripCard'
-import TripForm from './TripForm'
+import TripCard from './components/TripCard';
+import TripForm from './components/TripForm';
 
 function formatTripDates(startDate, endDate) {
   const start = new Date(`${startDate}T00:00:00`)
@@ -30,6 +30,12 @@ function App() {
     localStorage.setItem('trips', JSON.stringify(trips))
   }, [trips]);
 
+  const parsePreferences = (value) =>
+  value
+    .split(',')
+    .map((item) => item.trim())
+    .filter(Boolean);
+
   const addTrip = async (form) => {
     try {
       const response = await fetch('http://localhost:8000/api/trips', {
@@ -44,10 +50,8 @@ function App() {
           adults: Number(form.adults),
           children: Number(form.children),
           budget: form.budget,
-          interests: form.interests
-            .split(',')
-            .map((interest) => interest.trim())
-            .filter(Boolean),
+          dietary_preferences: parsePreferences(form.dietaryPreferences),
+          attraction_preferences: parsePreferences(form.attractionPreferences),
           preferences: form.preferences,
         }),
       });

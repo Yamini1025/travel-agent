@@ -31,9 +31,10 @@ def search_hotels(destination, start_date, end_date):
 
     return results
 
-def search_attractions(destination, interests=None):
-    if interests:
-        query = f"best attractions in {destination} {interests}"
+def search_attractions(destination, attraction_preferences=None):
+    if attraction_preferences:
+        preferences = ", ".join(attraction_preferences)
+        query = f"best {preferences} attractions in {destination}"
     else:
         query = f"best attractions in {destination}"
 
@@ -45,10 +46,11 @@ def search_attractions(destination, interests=None):
 
     return results
 
-def search_restaurants(destination, interests=None):
-    if interests :
-        query = f"best restaurants in {destination} {interests}"
-    else :
+def search_restaurants(destination, dietary_preferences=None):
+    if dietary_preferences:
+        preferences = ", ".join(dietary_preferences)
+        query = f"best {preferences} restaurants in {destination}"
+    else:
         query = f"best restaurants in {destination}"
 
     results = serpapi.search({

@@ -1,0 +1,94 @@
+.itinerary-content h2,
+.itinerary-content h3,
+.itinerary-content p {
+	margin: 0;
+}
+
+.itinerary-popup {
+	position: fixed;
+	inset: 0;
+	z-index: 1000;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.itinerary-content {
+	position: relative;
+	width: 90%;
+	max-width: 700px;
+	max-height: 80vh;
+	overflow-y: auto;
+	padding: 32px;
+	border-radius: 16px;
+	background-color: #fff;
+	box-shadow: 0 24px 60px #1f243d40;
+}
+
+.popup-close {
+	position: absolute;
+	top: 12px;
+	right: 16px;
+	color: #4c5261;
+	background-color: transparent;
+	font-size: 28px;
+	line-height: 20px;
+}
+
+.loading-state {
+	padding: 60px 20px;
+	text-align: center;
+}
+
+.loading-state h2 {
+	color: #262c40;
+    font-family: 'Space Grotesk', sans-serif;
+	font-size: 20px;
+}
+
+.loading-state p {
+	margin-top: 10px;
+	color: #858ba1;
+	font-size: 14px;
+}
+
+.itinerary-details h2 {
+	color: #302dca;
+    font-family: 'Space Grotesk', sans-serif;
+	font-size: 22px;
+}
+
+.itinerary-details .trip-date {
+	margin-top: 8px;
+	padding-bottom: 0;
+}
+
+.itinerary-day {
+	margin-top: 24px;
+}
+
+.itinerary-day h3 {
+	margin-bottom: 8px;
+	color: #31374a;
+	font-size: 14px;
+}
+
+.itinerary-day ul {
+	margin: 0;
+	padding-left: 20px;
+	color: #575f78;
+	font-size: 13px;
+	line-height: 1.65;
+}
+
+.itinerary-day li {
+	margin-bottom: 8px;
+}
+
+@media (max-width: 540px) {
+	.itinerary-content {
+		width: 94%;
+		padding: 24px 18px;
+	}
+}
