@@ -81,6 +81,7 @@ function TripForm({ onSubmit, onClose }) {
               name="endDate"
               type="date"
               value={form.endDate}
+              min={form.startDate}
               onChange={handleChange}
               required
             />
