@@ -41,7 +41,10 @@ def search_attractions(destination, interests):
     return results
 
 def search_restaurants(destination, interests):
-    query = f"best restaurants in {destination} {interests}"
+    if interests :
+        query = f"best restaurants in {destination} {interests}"
+    else :
+        query = f"best restaurants in {destination}"
 
     results = serpapi.search({
         "engine": "google_local",
