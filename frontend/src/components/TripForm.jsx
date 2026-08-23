@@ -1,4 +1,5 @@
 import { useState } from "react";
+import './TripForm.css';
 
 const initialForm = {
   destination: '',
@@ -7,7 +8,8 @@ const initialForm = {
   adults: '',
   children: '',
   budget: '',
-  interests: '',
+  dietaryPreferences: '',
+  attractionPreferences: '',
   preferences: '',
 }
 
@@ -98,7 +100,6 @@ function TripForm({ onSubmit, onClose }) {
               required
             />
           </label>
-
           <label>
             Children
             <input
@@ -120,22 +121,33 @@ function TripForm({ onSubmit, onClose }) {
               <option>Luxury</option>
             </select>
           </label>
-          <label>
-            Interests
-            <input
-              name="interests"
-              value={form.interests}
+        </div>
+        <div className="preferences">
+          <label className="wide-field">
+            Dietary Preferences 
+            <textarea
+              name="dietaryPreferences"
+              value={form.dietaryPreferences}
               onChange={handleChange}
-              placeholder="Food, culture, beaches..."
+              placeholder="e.g. vegetarian, non-vegetarian, vegan..."
             />
           </label>
           <label className="wide-field">
-            Preferences
+            Attraction Preferences
+            <textarea
+              name="attractionPreferences"
+              value={form.attractionPreferences}
+              onChange={handleChange}
+              placeholder="e.g. family-friendly, thrill rides..."
+            />
+          </label>
+          <label className="wide-field">
+            Anything else we should keep in mind?
             <textarea
               name="preferences"
               value={form.preferences}
               onChange={handleChange}
-              placeholder="Anything we should keep in mind?"
+              placeholder="e.g. celebrating birthday, anniversary, etc."
             />
           </label>
         </div>

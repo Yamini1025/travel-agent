@@ -20,7 +20,8 @@ class TripRequest(BaseModel):
     adults: int
     children: int
     budget: str
-    interests: List[str]
+    dietary_preferences: List[str]
+    attraction_preferences: List[str]
     preferences: str
 
 @app.post("/api/trips")
@@ -30,6 +31,10 @@ def create_trip(trip: TripRequest):
         "trip": trip
     }
 
+@app.get("/api/test-flights")
+def test_flights():
+    return search_flights("LGB", "2026-10-10", "2026-10-15")
+
 @app.get("/api/test-hotels")
 def test_hotels():
     return search_hotels("Anaheim, Disneyland", "2026-10-10", "2026-10-15")
@@ -37,16 +42,12 @@ def test_hotels():
 
 @app.get("/api/test-attractions")
 def test_attractions():
-    return search_attractions("Anaheim, Disneyland")
+    return search_attractions("Anaheim, Disneyland", "thrill, roller coaster")
 
 
 @app.get("/api/test-restaurants")
 def test_restaurants():
     return search_restaurants("Anaheim, Disneyland", "vegetarian")
-
-@app.get("/api/test-flights")
-def test_flights():
-    return search_flights("LGB", "2026-10-10", "2026-10-15")
 
 app.add_middleware(
     CORSMiddleware,

@@ -1,0 +1,80 @@
+.trip-card h2,
+.trip-card p {
+	margin: 0;
+}
+
+.trip-card {
+	overflow: hidden;
+	border: 1px solid #ebecf3;
+	border-radius: 14px;
+	background-color: #fff;
+	box-shadow: 0 10px 22px #414b7d0a;
+	transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.trip-card:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 16px 32px #414b7d18;
+}
+
+.trip-content {
+	padding: 22px 22px 20px;
+}
+
+.trip-heading {
+	display: flex;
+	justify-content: space-between;
+}
+
+.trip-heading h2 {
+	color: #262c40;
+    font-family: 'Space Grotesk', sans-serif;
+	font-size: 19px;
+}
+
+.trip-date {
+	margin-top: 10px;
+	padding-bottom: 18px;
+	color: #8c91a4;
+	font-size: 12px;
+}
+
+.trip-footer {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding-top: 18px;
+	color: #8d93a4;
+	font-size: 11px;
+}
+
+.card-button {
+	padding: 11px 20px;
+	border-radius: 18px;
+	color: #fff;
+	background-color: #7060e8;
+	font-size: 12px;
+	font-weight: 700;
+	box-shadow: 0 6px 14px #7060e833;
+	transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card-button:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 8px 18px #7060e84d;
+}
+
+.delete-button {
+	padding: 8px 12px;
+	border-radius: 18px;
+	color: #c0392b;
+	background-color: #fff5f4;
+	font-size: 11px;
+	font-weight: 700;
+	transition: background-color 0.2s, color 0.2s;
+}
+
+.delete-button:hover {
+	color: #690e04;
+	background-color: #f7d6d3;
+}
