@@ -84,13 +84,37 @@ def search_attractions(destination, attraction_preferences=None):
     else:
         query = f"best attractions in {destination}"
 
-    results = serpapi.search({
-        "engine": "google_local",
-        "q": query,
-        "api_key": SERPAPI_KEY,
-    })
+    try:
+        results = serpapi.search({
+            "engine": "google_local",
+            "q": query,
+            "api_key": SERPAPI_KEY,
+        })
 
-    return results
+        attractions = results.get("local_results", [])
+        formatted_attractions = []
+
+        if not attractions:
+            return []
+
+        for attraction in attractions:
+            formatted_attraction = {
+                "name": attraction.get("title"),
+                "description": attraction.get("description"),
+                "address": attraction.get("address"),
+                "hours": attraction.get("hours"),
+                "website": attraction.get("links", {}).get("website"),
+                "directions": attraction.get("links", {}).get("directions"),
+                "latitude": attraction.get("gps_coordinates", {}).get("latitude"),
+                "longitude": attraction.get("gps_coordinates", {}).get("longitude")
+            }
+
+            formatted_attractions.append(formatted_attraction)
+
+        return formatted_attractions
+    except Exception as e:
+        print(f"Attraction search error: {e}")
+        return []
 
 def search_restaurants(destination, dietary_preferences=None):
     if dietary_preferences:
@@ -99,10 +123,39 @@ def search_restaurants(destination, dietary_preferences=None):
     else:
         query = f"best restaurants in {destination}"
 
-    results = serpapi.search({
-        "engine": "google_local",
-        "q": query,
-        "api_key": SERPAPI_KEY,
-    })
+    try:
+        results = serpapi.search({
+            "engine": "google_local",
+            "q": query,
+            "api_key": SERPAPI_KEY,
+        })
 
-    return results
+        restaurants = results.get("local_results", [])
+        formatted_restaurants = []
+
+        if not restaurants:
+            return []
+
+        for restaurant in restaurants:
+            formatted_restaurant = {
+                "name": restaurant.get("title"),
+                "description": restaurant.get("description"),
+                "review_count": restaurant.get("reviews"),
+                "rating": restaurant.get("rating"),
+                "cuisine": restaurant.get("type"),
+                "address": restaurant.get("address"),
+                "hours": restaurant.get("hours"),
+                "latitude": restaurant.get("gps_coordinates", {}).get("latitude"),
+                "longitude": restaurant.get("gps_coordinates", {}).get("longitude")
+            }
+
+            formatted_restaurants.append(formatted_restaurant)
+
+        return formatted_restaurants
+    except Exception as e:
+        print(f"Restaurant search error: {e}")
+        return []
+
+
+
+        
