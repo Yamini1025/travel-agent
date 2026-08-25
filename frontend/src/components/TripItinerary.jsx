@@ -28,29 +28,7 @@ function TripItinerary({ trip, onClose }) {
             <p className="trip-date">{trip.dates}</p>
 
             <div className="itinerary-day">
-              <h3>Day 1 — Arrival</h3>
-              <ul>
-                <li>Arrive at destination</li>
-                <li>Check into hotel</li>
-                <li>Explore the local area</li>
-                <li>Dinner at a local restaurant</li>
-              </ul>
-            </div>
-
-            <div className="itinerary-day">
-              <h3>Day 2 — Explore</h3>
-              <ul>
-                <li>Breakfast at the hotel</li>
-                <li>Visit the main attractions</li>
-              </ul>
-            </div>
-
-            <div className="itinerary-day">
-              <h3>Day 3 — Departure</h3>
-              <ul>
-                <li>Check out from hotel</li>
-                <li>Departure from destination</li>
-              </ul>
+              {trip.itinerary}
             </div>
           </div>
         )}
