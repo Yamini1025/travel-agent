@@ -8,7 +8,7 @@ from serpapi_client import (
     search_attractions,
     search_restaurants
 )
-
+from gemini_client import generate_itinerary
 
 app = FastAPI()
 
@@ -26,9 +26,44 @@ class TripRequest(BaseModel):
 
 @app.post("/api/trips")
 def create_trip(trip: TripRequest):
+    flights = search_flights(
+        trip.destination,
+        trip.start_date,
+        trip.end_date
+    )
+
+    hotels = search_hotels(
+        trip.destination,
+        trip.start_date,
+        trip.end_date
+    )
+
+    attractions = search_attractions(
+        trip.destination,
+        trip.attraction_preferences
+    )
+
+    restaurants = search_restaurants(
+        trip.destination,
+        trip.dietary_preferences
+    )
+
+    search_results = {
+        "flights": flights,
+        "hotels": hotels,
+        "attractions": attractions,
+        "restaurants": restaurants
+    }
+
+    itinerary = generate_itinerary(
+        trip.model_dump(), # convert TripRequest object into a regular Python dictionary
+        search_results
+    )
+
     return {
         "success": True,
-        "trip": trip
+        "trip": trip.model_dump(),
+        "itinerary": itinerary
     }
 
 @app.get("/api/test-flights")
