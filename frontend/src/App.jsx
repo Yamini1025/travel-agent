@@ -63,6 +63,7 @@ function App() {
       const data = await response.json();
 
       console.log('Backend response:', data);
+      console.log('Itinerary:', data.itinerary);
 
       const destination = form.destination.trim();
       const dates = formatTripDates(form.startDate, form.endDate);
@@ -73,6 +74,7 @@ function App() {
           id: `${destination}-${Date.now()}`,
           title: destination,
           dates,
+          itinerary: data.itinerary,
         },
         ...currentTrips,
       ]);
