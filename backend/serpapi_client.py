@@ -68,6 +68,8 @@ def search_hotels(destination, start_date, end_date):
                 "total_price": hotel.get("total_rate", {}).get("extracted_lowest"),
                 "rating": hotel.get("overall_rating"),
                 "hotel_class": hotel.get("extracted_hotel_class"),
+                "latitude": hotel.get("gps_coordinates", {}).get("latitude"),
+                "longitude": hotel.get("gps_coordinates", {}).get("longitude"),
                 "location": hotel.get("nearby_places", []),
                 "link": hotel.get("link")
             }
