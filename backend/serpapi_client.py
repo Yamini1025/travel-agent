@@ -6,13 +6,77 @@ load_dotenv()
 
 SERPAPI_KEY = os.getenv("SERPAPI_KEY")
 
+def get_airport_id(destination):
+    results = serpapi.search({
+        "engine": "google_flights_autocomplete",
+        "q": destination,
+        "gl": "us",
+        "hl": "en",
+        "api_key": SERPAPI_KEY,
+    })
+
+    suggestions = results.get("suggestions", [])
+
+    for suggestion in suggestions:
+        if suggestion.get("type") == "city":
+            airports = suggestion.get("airports", [])
+
+            if airports:
+                return airports[0].get("id")
+
+    if "," in destination:
+        broader_location = destination.split(",")[0].strip()
+
+        results = serpapi.search({
+            "engine": "google_flights_autocomplete",
+            "q": broader_location,
+            "gl": "us",
+            "hl": "en",
+            "api_key": SERPAPI_KEY,
+        })
+
+        suggestions = results.get("suggestions", [])
+
+        for suggestion in suggestions:
+            if suggestion.get("type") == "city":
+                airports = suggestion.get("airports", [])
+
+                if airports:
+                    return airports[0].get("id")
+
+        if "," in destination:
+            broader_location = destination.split(",")[0].strip()
+
+            results = serpapi.search({
+                "engine": "google_flights_autocomplete",
+                "q": broader_location,
+                "gl": "us",
+                "hl": "en",
+                "api_key": SERPAPI_KEY,
+            })
+
+            suggestions = results.get("suggestions", [])
+
+            for suggestion in suggestions:
+                if suggestion.get("type") == "city":
+                    airports = suggestion.get("airports", [])
+
+                    if airports:
+                        return airports[0].get("id")
+
+    return None
 
 def search_flights(destination, start_date, end_date):
     try :
+        arrival_id = get_airport_id(destination)
+        if not arrival_id:
+            print(f"Could not find airport ID for destination: {destination}")
+            return []
+        
         results = serpapi.search({
             "engine": "google_flights",
             "departure_id": "SFO",
-            "arrival_id": destination,
+            "arrival_id": arrival_id,
             "type" : "1",
             "outbound_date": start_date,
             "return_date": end_date,
