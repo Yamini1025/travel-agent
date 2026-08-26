@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import './App.css'
 import TripCard from './components/TripCard';
 import TripForm from './components/TripForm';
+import TripItinerary from './components/TripItinerary';
 
 function formatTripDates(startDate, endDate) {
   const start = new Date(`${startDate}T00:00:00`)
@@ -25,6 +26,8 @@ function App() {
   });
 
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [showItinerary, setShowItinerary] = useState(false);
+  const [selectedTrip, setSelectedTrip] = useState(null);
 
   useEffect(() => {
     localStorage.setItem('trips', JSON.stringify(trips))
@@ -37,6 +40,10 @@ function App() {
     .filter(Boolean);
 
   const addTrip = async (form) => {
+    setIsFormOpen(false);
+    setSelectedTrip(null);
+    setShowItinerary(true);
+
     try {
       const response = await fetch('http://localhost:8000/api/trips', {
         method: 'POST',
@@ -68,18 +75,20 @@ function App() {
       const destination = form.destination.trim();
       const dates = formatTripDates(form.startDate, form.endDate);
 
-      setTrips((currentTrips) => [
-        {
+      const newTrip = {
           ...form,
           id: `${destination}-${Date.now()}`,
           title: destination,
           dates,
           itinerary: data.itinerary,
-        },
+        };
+      
+      setSelectedTrip(newTrip);
+
+      setTrips((currentTrips) => [
+        newTrip,
         ...currentTrips,
       ]);
-
-      setIsFormOpen(false);
 
     } catch (error) {
       console.error('Error creating trip:', error);
@@ -120,7 +129,7 @@ function App() {
             <strong>Plan Your Next Adventure</strong>
           </button>
           {trips.map((trip) => (
-            <TripCard trip={trip} key={trip.id} onDelete={handleDelete}/>
+            <TripCard trip={trip} key={trip.id} setShowItinerary={setShowItinerary} setSelectedTrip={setSelectedTrip} onDelete={handleDelete}/>
           ))}
         </div>
       </section>
@@ -128,6 +137,12 @@ function App() {
         <TripForm
           onSubmit={addTrip}
           onClose={() => setIsFormOpen(false)}
+        />
+      )}
+      {showItinerary && (
+        <TripItinerary
+          trip={selectedTrip}
+          onClose={() => setShowItinerary(false)}
         />
       )}
     </main>

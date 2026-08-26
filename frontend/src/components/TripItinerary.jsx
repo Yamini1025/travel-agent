@@ -1,15 +1,6 @@
-import { useState, useEffect } from 'react';
 import './TripItinerary.css';
 
 function TripItinerary({ trip, onClose }) {
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-  }, []);
-
   return (
     <div className="itinerary-popup">
       <div className="itinerary-content">
@@ -17,7 +8,7 @@ function TripItinerary({ trip, onClose }) {
           ×
         </button>
 
-        {isLoading ? (
+        {!trip ? (
           <div className="loading-state">
             <h2>Generating your itinerary...</h2>
             <p>Please wait a few minutes while we plan your trip.</p>
