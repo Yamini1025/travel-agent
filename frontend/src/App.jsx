@@ -71,6 +71,16 @@ function App() {
 
       console.log('Backend response:', data);
       console.log('Itinerary:', data.itinerary);
+      
+      let itinerary = data.itinerary;
+
+      if (typeof itinerary === 'string') {
+        itinerary = itinerary
+          .replace(/^```json\s*/, '')
+          .replace(/\s*```$/, '');
+
+        itinerary = JSON.parse(itinerary);
+      }
 
       const destination = form.destination.trim();
       const dates = formatTripDates(form.startDate, form.endDate);
@@ -80,7 +90,7 @@ function App() {
           id: `${destination}-${Date.now()}`,
           title: destination,
           dates,
-          itinerary: data.itinerary,
+          itinerary: itinerary,
         };
       
       setSelectedTrip(newTrip);

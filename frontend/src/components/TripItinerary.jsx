@@ -19,7 +19,19 @@ function TripItinerary({ trip, onClose }) {
             <p className="trip-date">{trip.dates}</p>
 
             <div className="itinerary-day">
-              {trip.itinerary}
+              {trip.itinerary.days.map((day) => (
+                <div key={day.day}>
+                  <h3>Day {day.day}: {day.title}</h3>
+
+                  {day.activities.map((activity, index) => (
+                    <div key={index}>
+                      <h4>{activity.time} — {activity.title}</h4>
+                      <p>{activity.description}</p>
+                      <small>{activity.location}</small>
+                    </div>
+                  ))}
+                </div>
+              ))}
             </div>
           </div>
         )}
