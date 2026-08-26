@@ -1,7 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-	margin: 0;
 	font-family: 'DM Sans', sans-serif;
 }
 
@@ -27,11 +32,6 @@ body {
 
 .page-heading h1 {
     font-family: 'Space Grotesk', sans-serif;
-}
-
-h1,
-p {
-	margin: 0;
 }
 
 h1 {
