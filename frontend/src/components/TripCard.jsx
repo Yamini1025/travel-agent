@@ -2,13 +2,11 @@ import { useState } from "react";
 import './TripCard.css';
 import TripItinerary from './TripItinerary';
 
-function TripCard({ trip, onDelete }) {
-  const [showItinerary, setShowItinerary] = useState(false);
-  
-
-  const handleViewItinerary = () => {
+function TripCard({ trip, setShowItinerary, setSelectedTrip, onDelete }) {
+  function handleClick() {
     setShowItinerary(true);
-  };
+    setSelectedTrip(trip);
+  }
 
   return (
     <>
@@ -21,23 +19,15 @@ function TripCard({ trip, onDelete }) {
             </div>
           </div>
           <div className="trip-footer">
-            <button className="card-button" onClick={handleViewItinerary}>
+            <button className="card-button" onClick={handleClick}>
               View Itinerary
             </button>
-
             <button className="delete-button" onClick={() => onDelete(trip.id)}>
               Delete
             </button>
           </div>
         </div>
       </article>
-
-      {showItinerary && (
-        <TripItinerary
-          trip={trip}
-          onClose={() => setShowItinerary(false)}
-        />
-      )}
     </>
   );
 }
