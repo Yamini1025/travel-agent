@@ -33,10 +33,11 @@ def generate_itinerary(trip, search_results):
     - Only recommend specific flights, hotels, attractions, and restaurants when they are in the provided travel research. Do not invent specific 
       businesses, prices, ratings, flight details, or hotel details.
     - Organize the itinerary by day, for example : Day 1 itinerary, then Day 2 itinerary, then Day 3 itinerary.
-    - Include morning, afternoon, and evening activities. Do not force activities into every time period if they would make the itinerary unrealistic.
+    - Include morning, afternoon, and evening activities. Do not force activities into every time period if they would make the itinerary unrealistic. Include the time for each activity instead of labeling them as morning, afternoon, or evening.
     - Include restaurant suggestions for meals when appropriate.
     - Make the itinerary realistic and avoid overloading each day with too many activities. 
     - Keep activities geographically sensible when possible so the traveler does not unnecessarily travel back and forth across the destination.
+    - Prioritize POPULAR tourist attractions and restaurants when possible.
 
     - Write all titles, descriptions, locations, and other text values in natural, polished, grammatically correct English. 
     - Use clear, conversational language that sounds like a helpful human travel planner. 

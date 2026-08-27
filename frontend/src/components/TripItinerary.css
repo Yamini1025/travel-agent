@@ -1,6 +1,6 @@
 .itinerary-details {
     background-color: rgb(244, 249, 254);
-    height: 100vh;
+    min-height: 100vh;
     padding: 20px 40px;
 }
 
