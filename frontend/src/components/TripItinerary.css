@@ -18,8 +18,11 @@
     gap: 50px;
 }
 
-.your-button {
-    grid-column: span 2;
+.navigation-system {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
 }
 
 .day-navigation {
@@ -51,6 +54,22 @@
 .day-btn:hover {
     background-color: #7060e8;
     color: white;
+}
+
+.home-btn {
+    padding: 11px 60px;
+	border-radius: 18px;
+	color: #fff;
+	background-color: #7060e8;
+	font-size: 12px;
+	font-weight: 700;
+	box-shadow: 0 6px 14px #7060e833;
+	transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.home-btn:hover {
+    transform: translateY(-1px);
+	box-shadow: 0 8px 18px #7060e84d;
 }
 
 .day-agenda {
