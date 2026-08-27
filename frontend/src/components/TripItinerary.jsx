@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import './TripItinerary.css';
 
 function TripItinerary({ trips }) {
+    const navigate = useNavigate();
     const { tripId } = useParams(); // get trip id from url
     const trip = trips.find((trip) => trip.id === tripId); // find matching trip from the saved trips
 
@@ -15,16 +16,19 @@ function TripItinerary({ trips }) {
             <h2 className="trip-title">{trip.title}</h2>
             <p className="trip-date">{trip.dates}</p>
             <div className="itinerary-layout">
-                <div className="day-navigation">
-                    {trip.itinerary.days.map((day) => (
-                        <button
-                            className="day-btn" 
-                            key={day.day}
-                            onClick={() => setSelectedDay(day.day)}
-                        >
-                            Day {day.day}
-                        </button>
-                    ))}
+                <div className="navigation-system">
+                    <div className="day-navigation">
+                        {trip.itinerary.days.map((day) => (
+                            <button
+                                className="day-btn" 
+                                key={day.day}
+                                onClick={() => setSelectedDay(day.day)}
+                            >
+                                Day {day.day}
+                            </button>
+                        ))}
+                    </div>
+                    <button className="home-btn" onClick={() => navigate('/')}>Home</button>
                 </div>
                 <div className="day-agenda">
                     <h2 className="trip-day-title">Day {day.day}: {day.title}</h2>
