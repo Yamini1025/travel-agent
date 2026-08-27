@@ -18,6 +18,10 @@
     gap: 50px;
 }
 
+.your-button {
+    grid-column: span 2;
+}
+
 .day-navigation {
     display: flex;
     flex-direction: column;
