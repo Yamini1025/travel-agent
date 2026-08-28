@@ -25,12 +25,18 @@ function Homepage({ trips, setTrips }) {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [showItinerary, setShowItinerary] = useState(false);
   const [selectedTrip, setSelectedTrip] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('')
 
   const parsePreferences = (value) =>
   value
     .split(',')
     .map((item) => item.trim())
     .filter(Boolean);
+
+  const filteredTrips = trips.filter((trip) => 
+    trip.destination.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    trip.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const addTrip = async (form) => {
     setIsFormOpen(false);
@@ -124,7 +130,11 @@ function Homepage({ trips, setTrips }) {
         </div>
         <div className="toolbar">
           <label className="search-field">
-            <input placeholder="Find a trip by destination or name..." />
+            <input 
+              placeholder="Find a trip by destination or name..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </label>
         </div>
         <div className="trip-grid">
@@ -135,8 +145,14 @@ function Homepage({ trips, setTrips }) {
             <span className="plus">+</span>
             <strong>Plan Your Next Adventure</strong>
           </button>
-          {trips.map((trip) => (
-            <TripCard trip={trip} key={trip.id} setShowItinerary={setShowItinerary} setSelectedTrip={setSelectedTrip} onDelete={handleDelete}/>
+          {filteredTrips.map((trip) => (
+            <TripCard 
+              trip={trip} 
+              key={trip.id} 
+              setShowItinerary={setShowItinerary} 
+              setSelectedTrip={setSelectedTrip} 
+              onDelete={handleDelete}
+            />
           ))}
         </div>
       </section>
