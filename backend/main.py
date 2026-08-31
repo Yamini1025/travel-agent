@@ -18,8 +18,7 @@ class TripRequest(BaseModel):
     destination: str
     start_date: str
     end_date: str
-    adults: int
-    children: int
+    trip_type: List[str]
     budget: str
     dietary_preferences: List[str]
     attraction_preferences: List[str]

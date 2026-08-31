@@ -26,7 +26,7 @@ def generate_itinerary(trip, search_results):
 
     Requirements:
     - The itinerary should follow the user's trip, including destination, travel dates, and trip length.
-    - Take the number of adults and children into consideration when selecting activities, restaurants, and the overall pace of the itinerary.
+    - Take the trip type (adult activities, kid-friendly activities, or both) into consideration when selecting activities, restaurants, and the overall pace of the itinerary. If both are selected, balance the itinerary so it includes activities suitable for the whole group.
     - Stay within the user's stated budget. Consider the cost of both activities and food, not just transportation or accommodation.
     - Adjust the itinerary based on the user's budget level:
       Budget-friendly: Prioritize free and low-cost attractions, walking routes, public transportation, affordable restaurants, and iconic experiences that provide strong value. Include paid attractions selectively when they are particularly popular or important to the destination.

@@ -103,17 +103,16 @@ const selectedHotel = location.state?.selectedHotel || savedTrip?.selectedHotel;
                         <span className="summary-label">Destination</span>
                         <span className="summary-value">{trip.destination}</span>
                     </div>
-
-                    <div className="summary-item">
-                        <span className="summary-label">Travelers</span>
-                        <span className="summary-value">
-                            {trip.adults} adult{trip.adults !== '1' ? 's' : ''}
-                            {trip.children && trip.children !== '0'
-                                ? `, ${trip.children} child${trip.children !== '1' ? 'ren' : ''}`
-                                : ''}
-                        </span>
-                    </div>
-
+                    {trip.tripType?.length > 0 && (
+                        <div className="summary-item">
+                            <span className="summary-label">Trip Type</span>
+                            <span className="summary-value">
+                                {trip.tripType
+                                    .map((type) => (type === 'adult' ? 'Adult Activities' : 'Kid-Friendly Activities'))
+                                    .join(' + ')}
+                            </span>
+                        </div>
+                    )}
                     <div className="summary-item">
                         <span className="summary-label">Budget</span>
                         <span className="summary-value">{trip.budget}</span>
