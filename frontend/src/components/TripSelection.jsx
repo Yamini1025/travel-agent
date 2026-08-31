@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './TripSelection.css';
 import GeneratePopup from './GeneratePopup';
+import FlightSelection from './FlightSelection';
+import HotelSelection from './HotelSelection';
 
 function TripSelection({setTrips}) {
   const navigate = useNavigate();
@@ -91,95 +93,19 @@ function TripSelection({setTrips}) {
 
   return (
     <main className="selection-page">
-      <h1>Choose Your Flight & Hotel</h1>
-
-      <section className="selection-section">
-        <h2>Flights</h2>
-
-        <div className="selection-grid">
-          {flights?.length > 0 ? (
-            flights.map((flight, index) => (
-              <label
-                className={`selection-card ${
-                  selectedFlight === flight ? 'selected' : ''
-                }`}
-              >
-                <input
-                  type="radio"
-                  name="flight"
-                  checked={selectedFlight === flight}
-                  onChange={() => setSelectedFlight(flight)}
-                />
-
-                <div className="radio-circle"></div>
-
-                <div className="flight-info">
-                  <h3>{flight.airline}</h3>
-
-                  <p>
-                    {flight.departure} → {flight.arrival}
-                  </p>
-
-                  <span>
-                    {flight.stops === 0
-                      ? 'Nonstop'
-                      : `${flight.stops} stop${flight.stops > 1 ? 's' : ''}`}
-                  </span>
-                </div>
-
-                <strong>${flight.price}</strong>
-              </label>
-            ))
-          ) : (
-            <p>No flights found.</p>
-          )}
-        </div>
-      </section>
-
-      <section className="selection-section">
-        <h2>Hotels</h2>
-
-        <div className="selection-grid">
-          {hotels?.length > 0 ? (
-            hotels.map((hotel, index) => (
-              <label
-                key={index}
-                className={`selection-card ${
-                  selectedHotel === hotel ? 'selected' : ''
-                }`}
-              >
-                <input
-                  type="radio"
-                  name="hotel"
-                  checked={selectedHotel === hotel}
-                  onChange={() => setSelectedHotel(hotel)}
-                />
-
-                <div className="radio-circle"></div>
-
-                <div className="hotel-info">
-                  <h3>{hotel.name}</h3>
-
-                  <p>{hotel.description}</p>
-
-                  <span>
-                    {hotel.rating
-                      ? `⭐ ${hotel.rating}`
-                      : 'No rating available'}
-                  </span>
-                </div>
-
-                <strong>
-                  ${hotel.price_per_night ?? 'N/A'} / night
-                </strong>
-              </label>
-            ))
-          ) : (
-            <p>No hotels found.</p>
-          )}
-        </div>
-      </section>
-
+      <p className='selection-page-title'>Choose Your Flight & Hotel</p>
+      <div className='selection-grid'>
+        <FlightSelection 
+          flights={flights}
+          selectedFlight={selectedFlight}
+          setSelectedFlight={setSelectedFlight}
+        />
+        <HotelSelection 
+          hotels={hotels}
+          selectedHotel={selectedHotel}
+          setSelectedHotel={setSelectedHotel}
+        />
+      </div>
       <button
         className="continue-button"
         disabled={!selectedFlight || !selectedHotel}
@@ -187,7 +113,6 @@ function TripSelection({setTrips}) {
       >
         Continue to Itinerary
       </button>
-
       {isGenerating && (
         <GeneratePopup
           trip={trip}

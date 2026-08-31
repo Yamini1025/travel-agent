@@ -21,7 +21,7 @@ function formatTripDates(startDate, endDate) {
 }
 
 function Homepage({ trips, setTrips }) {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [showSearchPopup, setShowSearchPopup] = useState(false);
   const [selectedTrip, setSelectedTrip] = useState(null);
