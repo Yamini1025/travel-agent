@@ -1,6 +1,9 @@
 .itinerary-details {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
     background-color: rgb(244, 249, 254);
-    min-height: 100vh;
+    height: 100vh;
     padding: 20px 40px;
 }
 
@@ -8,14 +11,24 @@
     color: #6652e8;
 }
 
+.activity-timestamp {
+    white-space: nowrap;
+}
+
 .trip-date {
     color: black;
+}
+
+.trip-title, .trip-date {
+    flex-shrink: 0;
 }
 
 .itinerary-layout {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     gap: 50px;
+    flex: 1;
+    min-height: 0;
 }
 
 .navigation-system {
@@ -23,6 +36,8 @@
     flex-direction: column;
     align-items: center;
     gap: 40px;
+    grid-column: span 2;
+    min-width: 0;
 }
 
 .day-navigation {
@@ -35,11 +50,13 @@
     background-color: white;
     border-radius: 30px;
     grid-column: span 2;
+    width: 100%;
     padding: 30px;
 }
 
 .day-btn {
-    width: 150px;
+    width: 100%;
+    max-width: 150px;
     padding: 11px 20px;
 	border-radius: 18px;
     border: 1px solid #7060e8;
@@ -74,6 +91,10 @@
 
 .day-agenda {
     grid-column: span 10;
+    min-width: 0;
+    min-height: 0;
+    overflow-y: auto;
+    padding-right: 10px;
 }
 
 .activity-view {
@@ -95,6 +116,7 @@
     flex-direction: column;
     gap: 10px;
     grid-column: span 11;
+    min-width: 0;
 }
 
 .activity-location {
@@ -103,4 +125,58 @@
 
 .activity-description {
     font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .itinerary-details {
+        padding: 20px;
+    }
+
+    .itinerary-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .navigation-system {
+        grid-column: span 1;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .day-navigation {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+        padding: 20px;
+        order: 2;
+    }
+
+    .day-btn {
+        max-width: none;
+        flex: 1 1 0;
+    }
+
+    .home-btn {
+        order: 1;
+        width: auto;
+    }
+
+    .day-agenda {
+        grid-column: span 1;
+    }
+
+    .activity-view {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .activity-timestamp {
+        grid-column: span 1;
+    }
+
+    .activity-details {
+        grid-column: span 1;
+    }
 }
