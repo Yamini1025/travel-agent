@@ -5,8 +5,7 @@ const initialForm = {
   destination: '',
   startDate: '',
   endDate: '',
-  adults: '',
-  children: '',
+  tripType: [],
   budget: '',
   dietaryPreferences: '',
   attractionPreferences: '',
@@ -32,6 +31,18 @@ function TripForm({ onSubmit, onClose }) {
   function handleClear(e) {
     e.preventDefault();
     setForm(initialForm);
+  }
+
+  function handleTripTypeChange(value) {
+    setForm((currentForm) => {
+      const alreadySelected = currentForm.tripType.includes(value);
+      return {
+        ...currentForm,
+        tripType: alreadySelected
+          ? currentForm.tripType.filter((item) => item !== value)
+          : [...currentForm.tripType, value],
+      };
+    });
   }
 
   return (
@@ -89,30 +100,6 @@ function TripForm({ onSubmit, onClose }) {
             />
           </label>
           <label>
-            Adults
-            <input
-              name="adults"
-              type="number"
-              min="0"
-              value={form.adults}
-              onChange={handleChange}
-              placeholder="Number of adults"
-              required
-            />
-          </label>
-          <label>
-            Children
-            <input
-              name="children"
-              type="number"
-              min="0"
-              value={form.children}
-              onChange={handleChange}
-              placeholder="Number of children"
-              required
-            />
-          </label>
-          <label>
             Budget
             <select name="budget" value={form.budget} onChange={handleChange} required>
               <option value="" disabled>Select budget</option>
@@ -121,6 +108,27 @@ function TripForm({ onSubmit, onClose }) {
               <option>Luxury</option>
             </select>
           </label>
+        </div>
+        <div className="trip-type-field">
+          <span className="trip-type-label">Trip Type</span>
+          <div className="checkbox-group">
+            <label className="checkbox-option">
+              <input
+                type="checkbox"
+                checked={form.tripType.includes('adult')}
+                onChange={() => handleTripTypeChange('adult')}
+              />
+              Adult Activities
+            </label>
+            <label className="checkbox-option">
+              <input
+                type="checkbox"
+                checked={form.tripType.includes('kid')}
+                onChange={() => handleTripTypeChange('kid')}
+              />
+              Kid-Friendly Activities
+            </label>
+          </div>
         </div>
         <div className="preferences">
           <label className="wide-field">
