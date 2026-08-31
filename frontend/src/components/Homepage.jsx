@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '../App.css'
 import TripCard from './TripCard';
 import TripForm from './TripForm';
-import GeneratePopup from './GeneratePopup';
+import SearchPopup from './SearchPopup';
 
 function formatTripDates(startDate, endDate) {
   const start = new Date(`${startDate}T00:00:00`)
@@ -23,7 +23,7 @@ function formatTripDates(startDate, endDate) {
 function Homepage({ trips, setTrips }) {
     const navigate = useNavigate();
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [showItinerary, setShowItinerary] = useState(false);
+  const [showSearchPopup, setShowSearchPopup] = useState(false);
   const [selectedTrip, setSelectedTrip] = useState(null);
   const [searchTerm, setSearchTerm] = useState('')
 
@@ -41,7 +41,7 @@ function Homepage({ trips, setTrips }) {
   const addTrip = async (form) => {
     setIsFormOpen(false);
     setSelectedTrip(null);
-    setShowItinerary(true);
+    setShowSearchPopup(true);
 
     try {
       const response = await fetch('http://localhost:8000/api/trips', {
@@ -69,17 +69,6 @@ function Homepage({ trips, setTrips }) {
       const data = await response.json();
 
       console.log('Backend response:', data);
-      console.log('Itinerary:', data.itinerary);
-      
-      let itinerary = data.itinerary;
-
-      if (typeof itinerary === 'string') {
-        itinerary = itinerary
-          .replace(/^```json\s*/, '')
-          .replace(/\s*```$/, '');
-
-        itinerary = JSON.parse(itinerary);
-      }
 
       const destination = form.destination.trim();
       const dates = formatTripDates(form.startDate, form.endDate);
@@ -89,7 +78,6 @@ function Homepage({ trips, setTrips }) {
           id: `${destination}-${Date.now()}`,
           title: destination,
           dates,
-          itinerary: itinerary,
         };
       
       setSelectedTrip(newTrip);
@@ -99,12 +87,20 @@ function Homepage({ trips, setTrips }) {
         ...currentTrips,
       ]);
 
-      if(newTrip.itinerary) {
-        navigate(`/itinerary/${newTrip.id}`);
-      }
+      setShowSearchPopup(false);
+      navigate(`/selection/${newTrip.id}`, {
+        state: {
+          trip: newTrip,
+          flights: data.flights,
+          hotels: data.hotels,
+          attractions: data.attractions,
+          restaurants: data.restaurants,
+        },
+      });
 
     } catch (error) {
       console.error('Error creating trip:', error);
+      setShowSearchPopup(false);
     }
   }
 
@@ -149,8 +145,6 @@ function Homepage({ trips, setTrips }) {
             <TripCard 
               trip={trip} 
               key={trip.id} 
-              setShowItinerary={setShowItinerary} 
-              setSelectedTrip={setSelectedTrip} 
               onDelete={handleDelete}
             />
           ))}
@@ -162,11 +156,8 @@ function Homepage({ trips, setTrips }) {
           onClose={() => setIsFormOpen(false)}
         />
       )}
-      {showItinerary && (
-        <GeneratePopup
-          trip={selectedTrip}
-          onClose={() => setShowItinerary(false)}
-        />
+      {showSearchPopup && (
+        <SearchPopup />
       )}
     </main>
   )

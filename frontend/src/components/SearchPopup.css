@@ -1,0 +1,42 @@
+.search-popup-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.search-popup {
+    background: white;
+    padding: 40px;
+    border-radius: 16px;
+    text-align: center;
+    width: 360px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.search-popup h2 {
+    margin-bottom: 10px;
+}
+
+.search-popup p {
+    margin: 0;
+}
+
+.loading-spinner {
+    width: 35px;
+    height: 35px;
+    margin: 0 auto 20px;
+    border: 4px solid #eee;
+    border-top: 4px solid #6652e8;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
