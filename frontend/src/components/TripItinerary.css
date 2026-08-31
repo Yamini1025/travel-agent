@@ -90,7 +90,7 @@
 }
 
 .day-agenda {
-    grid-column: span 10;
+    grid-column: span 7;
     min-width: 0;
     min-height: 0;
     overflow-y: auto;
@@ -127,13 +127,53 @@
     font-size: 0.9rem;
 }
 
+.trip-summary {
+    grid-column: span 3;
+    align-self: start;
+    background-color: white;
+    border-radius: 15px;
+    padding: 24px;
+    min-width: 0;
+    max-height: 100%;
+    overflow-y: auto;
+}
+
+.summary-title {
+    color: #6652e8;
+    margin-bottom: 16px;
+}
+
+.summary-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-bottom: 14px;
+}
+
+.summary-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #a0a5b5;
+}
+
+.summary-value {
+    font-size: 0.9rem;
+    color: #27304b;
+}
+
 @media (max-width: 768px) {
     .itinerary-details {
+        height: auto;
+        min-height: 100vh;
+        overflow: visible;
         padding: 20px;
     }
 
     .itinerary-layout {
         grid-template-columns: 1fr;
+        overflow: visible;
     }
 
     .navigation-system {
@@ -142,6 +182,7 @@
         align-items: flex-start;
         justify-content: center;
         flex-shrink: 0;
+        order: 2;
     }
 
     .day-navigation {
@@ -150,7 +191,6 @@
         justify-content: center;
         width: 100%;
         padding: 20px;
-        order: 2;
     }
 
     .day-btn {
@@ -159,12 +199,19 @@
     }
 
     .home-btn {
-        order: 1;
         width: auto;
     }
 
     .day-agenda {
         grid-column: span 1;
+        overflow-y: visible;
+        order: 3;
+    }
+
+    .trip-summary {
+        grid-column: span 1;
+        overflow-y: visible;
+        order: 1;
     }
 
     .activity-view {

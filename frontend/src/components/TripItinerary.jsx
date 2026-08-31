@@ -15,6 +15,9 @@ function TripItinerary({ trips }) {
     const trip = routerTrip || savedTrip;
     const itinerary = routerItinerary || savedTrip?.itinerary;
 
+    const selectedFlight = location.state?.selectedFlight || savedTrip?.selectedFlight;
+const selectedHotel = location.state?.selectedHotel || savedTrip?.selectedHotel;
+
     console.log("TRIP ID FROM URL:", tripId);
     console.log("ALL SAVED TRIPS:", trips);
     console.log("FOUND SAVED TRIP:", savedTrip);
@@ -41,7 +44,6 @@ function TripItinerary({ trips }) {
         <div className="itinerary-details">
             <h2 className="trip-title">{trip.title}</h2>
             <p className="trip-date">{trip.dates}</p>
-
             <div className="itinerary-layout">
                 <div className="navigation-system">
                     <div className="day-navigation">
@@ -55,7 +57,6 @@ function TripItinerary({ trips }) {
                             </button>
                         ))}
                     </div>
-
                     <button
                         className="home-btn"
                         onClick={() => navigate('/')}
@@ -63,7 +64,6 @@ function TripItinerary({ trips }) {
                         Home
                     </button>
                 </div>
-
                 <div className="day-agenda">
                     <h2 className="trip-day-title">
                         Day {day.day}: {day.title}
@@ -72,7 +72,6 @@ function TripItinerary({ trips }) {
                     <h3 className="trip-date">
                         {day.date}
                     </h3>
-
                     {day.activities.map((activity, index) => (
                         <div
                             key={index}
@@ -90,13 +89,72 @@ function TripItinerary({ trips }) {
                                 <p className="activity-location">
                                     📍 {activity.location}
                                 </p>
-
                                 <p className="activity-description">
                                     {activity.description}
                                 </p>
                             </div>
                         </div>
                     ))}
+                </div>
+                <div className="trip-summary">
+                    <h3 className="summary-title">Trip Details</h3>
+
+                    <div className="summary-item">
+                        <span className="summary-label">Destination</span>
+                        <span className="summary-value">{trip.destination}</span>
+                    </div>
+
+                    <div className="summary-item">
+                        <span className="summary-label">Travelers</span>
+                        <span className="summary-value">
+                            {trip.adults} adult{trip.adults !== '1' ? 's' : ''}
+                            {trip.children && trip.children !== '0'
+                                ? `, ${trip.children} child${trip.children !== '1' ? 'ren' : ''}`
+                                : ''}
+                        </span>
+                    </div>
+
+                    <div className="summary-item">
+                        <span className="summary-label">Budget</span>
+                        <span className="summary-value">{trip.budget}</span>
+                    </div>
+
+                    {trip.dietaryPreferences && (
+                        <div className="summary-item">
+                            <span className="summary-label">Dietary</span>
+                            <span className="summary-value">{trip.dietaryPreferences}</span>
+                        </div>
+                    )}
+
+                    {trip.attractionPreferences && (
+                        <div className="summary-item">
+                            <span className="summary-label">Attractions</span>
+                            <span className="summary-value">{trip.attractionPreferences}</span>
+                        </div>
+                    )}
+
+                    {trip.preferences && (
+                        <div className="summary-item">
+                            <span className="summary-label">Notes</span>
+                            <span className="summary-value">{trip.preferences}</span>
+                        </div>
+                    )}
+
+                    {selectedFlight && (
+                        <div className="summary-item">
+                            <span className="summary-label">Flight</span>
+                            <span className="summary-value">
+                                {selectedFlight.airline} · ${selectedFlight.price}
+                            </span>
+                        </div>
+                    )}
+
+                    {selectedHotel && (
+                        <div className="summary-item">
+                            <span className="summary-label">Hotel</span>
+                            <span className="summary-value">{selectedHotel.name}</span>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
