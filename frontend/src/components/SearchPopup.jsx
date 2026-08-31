@@ -9,7 +9,7 @@ function SearchPopup() {
         <h2>Finding your options...</h2>
 
         <p>
-          We're searching for flights and hotels for your trip.
+          We're searching for flights and hotels for your trip. Please give us a moment.
         </p>
       </div>
     </div>
