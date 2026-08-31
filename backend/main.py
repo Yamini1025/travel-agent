@@ -6,7 +6,8 @@ from serpapi_client import (
     search_flights,
     search_hotels,
     search_attractions,
-    search_restaurants
+    search_restaurants,
+    get_return_flight
 )
 from gemini_client import generate_itinerary
 
@@ -23,6 +24,13 @@ class TripRequest(BaseModel):
     dietary_preferences: List[str]
     attraction_preferences: List[str]
     preferences: str
+
+class ItineraryRequest(BaseModel):
+    trip: dict
+    selected_flight: dict
+    selected_hotel: dict
+    attractions: list
+    restaurants: list
 
 @app.post("/api/trips")
 def create_trip(trip: TripRequest):
@@ -48,27 +56,52 @@ def create_trip(trip: TripRequest):
         trip.dietary_preferences
     )
 
-    search_results = {
+    return {
+        "success": True,
+        "trip": trip.model_dump(),
         "flights": flights,
         "hotels": hotels,
         "attractions": attractions,
         "restaurants": restaurants
     }
 
+@app.post("/api/generate-itinerary")
+def create_itinerary(data: ItineraryRequest):
+    trip = data.trip
+    selected_flight = data.selected_flight
+    selected_hotel = data.selected_hotel
+    attractions = data.attractions
+    restaurants = data.restaurants
+
+    return_flight = get_return_flight(
+        selected_flight["departure_token"]
+    )
+
+    selected_flight["return_flight"] = return_flight
+
+    search_results = {
+        "flights": {
+            "outbound": selected_flight,
+            "return": return_flight
+        },
+        "hotel": selected_hotel,
+        "attractions": attractions,
+        "restaurants": restaurants
+    }
+
     itinerary = generate_itinerary(
-        trip.model_dump(), # convert TripRequest object into a regular Python dictionary
+        trip,
         search_results
     )
 
     return {
         "success": True,
-        "trip": trip.model_dump(),
         "itinerary": itinerary
     }
 
 @app.get("/api/test-flights")
 def test_flights():
-    return search_flights("LGB", "2026-10-10", "2026-10-15")
+    return search_flights("Los Angeles", "2026-10-10", "2026-10-15")
 
 @app.get("/api/test-hotels")
 def test_hotels():

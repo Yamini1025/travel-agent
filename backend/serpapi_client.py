@@ -83,7 +83,15 @@ def search_flights(destination, start_date, end_date):
             "api_key": SERPAPI_KEY,
         })
 
+        print("FLIGHT ARRIVAL ID:", arrival_id)
+        print("FLIGHT RESULT KEYS:", results.keys())
+        print("========== FLIGHT DEBUG ==========")
+        print(results.get("best_flights", [])[0])
+        print("==================================")
+
+        print("ABOUT TO DEFINE FLIGHTS")
         flights = results.get("best_flights", [])
+        print("FLIGHTS DEFINED:", len(flights))
 
         if not flights:
             return []
@@ -101,13 +109,52 @@ def search_flights(destination, start_date, end_date):
                 "departure_airport": flight.get("flights", [{}])[0]
                     .get("departure_airport", {}).get("id"),
                 "arrival_airport": flight.get("flights", [{}])[-1]
-                    .get("arrival_airport", {}).get("id")
+                    .get("arrival_airport", {}).get("id"),
+                "departure_token": flight.get("departure_token")
             }
             for flight in flights
         ]
     except Exception as e:
         print(f"Flight search error: {e}")
         return []
+
+def get_return_flight(departure_token):
+    try:
+        results = serpapi.search({
+            "engine": "google_flights",
+            "departure_token": departure_token,
+            "api_key": SERPAPI_KEY,
+        })
+
+        flights = results.get("best_flights", [])
+
+        if not flights:
+            return None
+
+        flight = flights[0]
+        segments = flight.get("flights", [])
+
+        if not segments:
+            return None
+
+        return {
+            "price": flight.get("price"),
+            "airline": segments[0].get("airline"),
+            "total_duration_minutes": flight.get("total_duration"),
+            "stops": len(flight.get("layovers", [])),
+            "departure": segments[0]
+                .get("departure_airport", {}).get("time"),
+            "arrival": segments[-1]
+                .get("arrival_airport", {}).get("time"),
+            "departure_airport": segments[0]
+                .get("departure_airport", {}).get("id"),
+            "arrival_airport": segments[-1]
+                .get("arrival_airport", {}).get("id")
+        }
+
+    except Exception as e:
+        print(f"Return flight search error: {e}")
+        return None
 
 def search_hotels(destination, start_date, end_date):
     try:
@@ -119,7 +166,9 @@ def search_hotels(destination, start_date, end_date):
         "api_key": SERPAPI_KEY,
         })
 
+        print("HOTEL RESULT KEYS:", results.keys())
         hotels = results.get("properties", [])
+        print("NUMBER OF HOTELS:", len(hotels))
 
         if not hotels:
             return []

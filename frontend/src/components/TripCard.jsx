@@ -1,12 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import './TripCard.css';
 
-function TripCard({ trip, setShowItinerary, setSelectedTrip, onDelete }) {
+function TripCard({ trip, onDelete }) {
   const navigate = useNavigate();
 
   function handleClick() {
-    setShowItinerary(true);
-    setSelectedTrip(trip);
     navigate(`/itinerary/${trip.id}`);
   }
 

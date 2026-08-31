@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom';
 import Homepage from './components/Homepage';
 import TripItinerary from './components/TripItinerary';
+import TripSelection from './components/TripSelection';
 import './App.css';
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Routes>
             <Route path="/" element={<Homepage trips={trips} setTrips={setTrips}/>}/>
             <Route path="/itinerary/:tripId" element={<TripItinerary trips={trips}/>}/>
+            <Route path="/selection/:tripId" element={<TripSelection setTrips={setTrips}/>}/>
         </Routes>
     );
 }
