@@ -2,6 +2,7 @@ import { useState } from "react";
 import './TripForm.css';
 
 const initialForm = {
+  startPoint: '',
   destination: '',
   startDate: '',
   endDate: '',
@@ -72,6 +73,17 @@ const formattedToday = `${today.getFullYear()}-${String(today.getMonth() + 1).pa
         </div>
         <div className="form-grid">
           <label>
+            Starting Point
+            <input
+              name="startPoint"
+              type="text"
+              value={form.startPoint}
+              onChange={handleChange}
+              placeholder="Where from?"
+              required
+            />
+          </label>
+          <label>
             Destination
             <input
               name="destination"
@@ -81,6 +93,11 @@ const formattedToday = `${today.getFullYear()}-${String(today.getMonth() + 1).pa
               required
             />
           </label>
+          <p className="location-note">
+            Enter both locations as a city name or city name, state name.
+            <br />
+            Example: San Francisco or San Francisco, CA
+          </p>
           <label>
             Start Date
             <input

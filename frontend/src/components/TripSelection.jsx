@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './TripSelection.css';
 import GeneratePopup from './GeneratePopup';
@@ -7,120 +7,133 @@ import HotelSelection from './HotelSelection';
 
 function TripSelection({setTrips}) {
   const navigate = useNavigate();
-  const location = useLocation();
+  const location = useLocation();
 
-  const { trip, flights, hotels, attractions, restaurants } = location.state || {};
+  const { trip, flights, hotels, attractions, restaurants } = location.state || {};
 
-  const [selectedFlight, setSelectedFlight] = useState(null);
-  const [selectedHotel, setSelectedHotel] = useState(null);
-  const [isGenerating, setIsGenerating] = useState(false);
+  const [selectedFlight, setSelectedFlight] = useState(null);
+  const [selectedHotel, setSelectedHotel] = useState(null);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [completed, setCompleted] = useState(false);
 
-  if (!trip) {
-    return <p>No trip information found.</p>;
-  }
+  useEffect(() => {
+    return () => {
+      if (!completed && trip) {
+        setTrips((currentTrips) =>
+          currentTrips.filter((savedTrip) => savedTrip.id !== trip.id)
+        );
+      }
+    };
+  }, [completed, trip, setTrips]);
 
-  async function handleContinue() {
-    if (!selectedFlight || !selectedHotel) {
-      return;
-    }
-    setIsGenerating(true);
+  if (!trip) {
+    return <p>No trip information found.</p>;
+  }
 
-    try {
-      const response = await fetch(
-        'http://localhost:8000/api/generate-itinerary',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            trip,
-            selected_flight: selectedFlight,
-            selected_hotel: selectedHotel,
-            attractions,
-            restaurants,
-          }),
-        }
-      );
+  async function handleContinue() {
+    if (!selectedFlight || !selectedHotel) {
+      return;
+    }
+    setIsGenerating(true);
 
-      if (!response.ok) {
-        throw new Error('Failed to generate itinerary');
-      }
+    try {
+      const response = await fetch(
+        'http://localhost:8000/api/generate-itinerary',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            trip,
+            selected_flight: selectedFlight,
+            selected_hotel: selectedHotel,
+            attractions,
+            restaurants,
+          }),
+        }
+      );
 
-      const data = await response.json();
+      if (!response.ok) {
+        throw new Error('Failed to generate itinerary');
+      }
 
-      console.log('Generated itinerary:', data.itinerary);
+      const data = await response.json();
 
-      let itinerary = data.itinerary;
+      console.log('Generated itinerary:', data.itinerary);
 
-      if (typeof itinerary === 'string') {
-        itinerary = itinerary
-          .replace(/^```json\s*/, '')
-          .replace(/\s*```$/, '');
+      let itinerary = data.itinerary;
 
-        itinerary = JSON.parse(itinerary);
-      }
+      if (typeof itinerary === 'string') {
+        itinerary = itinerary
+          .replace(/^```json\s*/, '')
+          .replace(/\s*```$/, '');
 
-      const updatedTrip = {
-        ...trip,
-        itinerary,
-        selectedFlight,
-        selectedHotel,
-      };
+        itinerary = JSON.parse(itinerary);
+      }
 
-      setTrips((currentTrips) =>
-        currentTrips.map((savedTrip) =>
-          savedTrip.id === trip.id ? updatedTrip : savedTrip
-        )
-      );
+      const updatedTrip = {
+        ...trip,
+        itinerary,
+        selectedFlight,
+        selectedHotel,
+      };
 
-      navigate(`/itinerary/${trip.id}`, {
-        state: {
-          trip,
-          selectedFlight,
-          selectedHotel,
-          attractions,
-          restaurants,
-          itinerary,
-        },
-      });
+      setCompleted(true);
 
-    } catch (error) {
-      console.error('Error generating itinerary:', error);
-      setIsGenerating(false);
-    }
-  }
+      setTrips((currentTrips) =>
+        currentTrips.map((savedTrip) =>
+          savedTrip.id === trip.id ? updatedTrip : savedTrip
+        )
+      );
 
-  return (
-    <main className="selection-page">
-      <p className='selection-page-title'>Choose Your Flight & Hotel</p>
-      <div className='selection-grid'>
-        <FlightSelection 
-          flights={flights}
-          selectedFlight={selectedFlight}
-          setSelectedFlight={setSelectedFlight}
-        />
-        <HotelSelection 
-          hotels={hotels}
-          selectedHotel={selectedHotel}
-          setSelectedHotel={setSelectedHotel}
-        />
-      </div>
-      <button
-        className="continue-button"
-        disabled={!selectedFlight || !selectedHotel}
-        onClick={handleContinue}
-      >
-        Continue to Itinerary
-      </button>
-      {isGenerating && (
-        <GeneratePopup
-          trip={trip}
-          onClose={() => {}}
-        />
-      )}
-    </main>
-  );
+      navigate(`/itinerary/${trip.id}`, {
+        state: {
+          trip,
+          selectedFlight,
+          selectedHotel,
+          attractions,
+          restaurants,
+          itinerary,
+        },
+      });
+
+    } catch (error) {
+      console.error('Error generating itinerary:', error);
+      setIsGenerating(false);
+    }
+  }
+
+  return (
+    <main className="selection-page">
+      <p className='selection-page-title'>Choose Your Flight & Hotel</p>
+      <div className='selection-grid'>
+        <FlightSelection 
+          flights={flights}
+          selectedFlight={selectedFlight}
+          setSelectedFlight={setSelectedFlight}
+        />
+        <HotelSelection 
+          hotels={hotels}
+          selectedHotel={selectedHotel}
+          setSelectedHotel={setSelectedHotel}
+        />
+      </div>
+      <button
+        className="continue-button"
+        disabled={!selectedFlight || !selectedHotel}
+        onClick={handleContinue}
+      >
+        Continue to Itinerary
+      </button>
+      {isGenerating && (
+        <GeneratePopup
+          trip={trip}
+          onClose={() => {}}
+        />
+      )}
+    </main>
+  );
 
 }
 

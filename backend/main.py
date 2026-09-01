@@ -15,6 +15,7 @@ app = FastAPI()
 
 
 class TripRequest(BaseModel):
+    start_point: str
     destination: str
     start_date: str
     end_date: str
@@ -34,6 +35,7 @@ class ItineraryRequest(BaseModel):
 @app.post("/api/trips")
 def create_trip(trip: TripRequest):
     flights = search_flights(
+        trip.start_point,
         trip.destination,
         trip.start_date,
         trip.end_date
@@ -73,6 +75,7 @@ def create_itinerary(data: ItineraryRequest):
     restaurants = data.restaurants
 
     return_flight = get_return_flight(
+        trip["startPoint"],
         trip["destination"],
         trip["endDate"],
         selected_flight["airline"]

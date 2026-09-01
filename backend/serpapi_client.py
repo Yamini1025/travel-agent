@@ -46,16 +46,20 @@ def get_airport_id(destination):
 
     return None
 
-def search_flights(destination, start_date, end_date):
+def search_flights(start_point, destination, start_date, end_date):
     try :
+        departure_id = get_airport_id(start_point)
         arrival_id = get_airport_id(destination)
+        if not departure_id:
+            print(f"Could not find airport ID for start point: {start_point}")
+            return []
         if not arrival_id:
             print(f"Could not find airport ID for destination: {destination}")
             return []
         
         results = serpapi.search({
             "engine": "google_flights",
-            "departure_id": "SFO",
+            "departure_id": departure_id,
             "arrival_id": arrival_id,
             "type" : "1",
             "outbound_date": start_date,
@@ -63,15 +67,7 @@ def search_flights(destination, start_date, end_date):
             "api_key": SERPAPI_KEY,
         })
 
-        print("FLIGHT ARRIVAL ID:", arrival_id)
-        print("FLIGHT RESULT KEYS:", results.keys())
-        print("========== FLIGHT DEBUG ==========")
-        print(results.get("best_flights", [])[0])
-        print("==================================")
-
-        print("ABOUT TO DEFINE FLIGHTS")
         flights = results.get("best_flights", [])
-        print("FLIGHTS DEFINED:", len(flights))
 
         if not flights:
             return []
@@ -98,18 +94,22 @@ def search_flights(destination, start_date, end_date):
         print(f"Flight search error: {e}")
         return []
     
-def get_return_flight(destination, end_date, airline):
+def get_return_flight(start_point, destination, end_date, airline):
     try:
         departure_id = get_airport_id(destination)
+        arrival_id = get_airport_id(start_point)
 
         if not departure_id:
             print(f"Could not find airport ID for destination: {destination}")
+            return None
+        if not arrival_id:
+            print(f"Could not find airport ID for start point: {start_point}")
             return None
 
         results = serpapi.search({
             "engine": "google_flights",
             "departure_id": departure_id,
-            "arrival_id": "SFO",
+            "arrival_id": arrival_id,
             "type": "2",
             "outbound_date": end_date,
             "api_key": SERPAPI_KEY,
@@ -153,10 +153,6 @@ def get_return_flight(destination, end_date, airline):
         print(f"Return flight search error: {e}")
         return None
 
-    except Exception as e:
-        print(f"Return flight search error: {e}")
-        return None
-
 def search_hotels(destination, start_date, end_date):
     try:
         results = serpapi.search({
@@ -167,9 +163,7 @@ def search_hotels(destination, start_date, end_date):
         "api_key": SERPAPI_KEY,
         })
 
-        print("HOTEL RESULT KEYS:", results.keys())
         hotels = results.get("properties", [])
-        print("NUMBER OF HOTELS:", len(hotels))
 
         if not hotels:
             return []

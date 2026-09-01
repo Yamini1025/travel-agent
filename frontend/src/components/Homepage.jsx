@@ -50,6 +50,7 @@ function Homepage({ trips, setTrips }) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          start_point: form.startPoint,
           destination: form.destination,
           start_date: form.startDate,
           end_date: form.endDate,

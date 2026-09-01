@@ -16,12 +16,7 @@ function TripItinerary({ trips }) {
     const itinerary = routerItinerary || savedTrip?.itinerary;
 
     const selectedFlight = location.state?.selectedFlight || savedTrip?.selectedFlight;
-const selectedHotel = location.state?.selectedHotel || savedTrip?.selectedHotel;
-
-    console.log("TRIP ID FROM URL:", tripId);
-    console.log("ALL SAVED TRIPS:", trips);
-    console.log("FOUND SAVED TRIP:", savedTrip);
-    console.log("SAVED ITINERARY:", savedTrip?.itinerary);
+    const selectedHotel = location.state?.selectedHotel || savedTrip?.selectedHotel;
 
     const [selectedDay, setSelectedDay] = useState(1);
 
@@ -103,7 +98,10 @@ const selectedHotel = location.state?.selectedHotel || savedTrip?.selectedHotel;
                 </div>
                 <div className="trip-summary">
                     <h3 className="summary-title">Trip Details</h3>
-
+                    <div className="summary-item">
+                        <span className="summary-label">Start Point</span>
+                        <span className="summary-value">{trip.startPoint}</span>
+                    </div>
                     <div className="summary-item">
                         <span className="summary-label">Destination</span>
                         <span className="summary-value">{trip.destination}</span>
