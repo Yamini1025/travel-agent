@@ -96,6 +96,11 @@ function TripSelection({setTrips}) {
   return (
     <main className="selection-page">
       <p className='selection-page-title'>Choose Your Flight & Hotel</p>
+      {(!flights?.length || !hotels?.length) && (
+        <p className="search-error-message">
+          Sorry, we couldn't retrieve flight or hotel information right now. Please try again later.
+        </p>
+      )}
       <div className='selection-grid'>
         <FlightSelection 
           flights={flights}

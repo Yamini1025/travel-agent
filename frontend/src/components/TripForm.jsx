@@ -300,6 +300,9 @@ function TripForm({ onSubmit, onClose }) {
               onChange={handleChange}
               placeholder="e.g. vegetarian, non-vegetarian, vegan..."
             />
+            {errors.dietaryPreferences && (
+              <span className="field-error">{errors.dietaryPreferences}</span>
+            )}
           </label>
           <label className="wide-field">
             Attraction Preferences
@@ -309,6 +312,9 @@ function TripForm({ onSubmit, onClose }) {
               onChange={handleChange}
               placeholder="e.g. family-friendly, thrill rides..."
             />
+            {errors.attractionPreferences && (
+              <span className="field-error">{errors.attractionPreferences}</span>
+            )}
           </label>
           <label className="wide-field">
             Anything else we should keep in mind?
@@ -318,6 +324,9 @@ function TripForm({ onSubmit, onClose }) {
               onChange={handleChange}
               placeholder="e.g. celebrating birthday, anniversary, etc."
             />
+            {errors.preferences && (
+              <span className="field-error">{errors.preferences}</span>
+            )}
           </label>
         </div>
         <div className="form-actions">
