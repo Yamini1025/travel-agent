@@ -38,6 +38,7 @@ function Homepage({ trips, setTrips }) {
     trip.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+
   const addTrip = async (form) => {
     setIsFormOpen(false);
     setSelectedTrip(null);

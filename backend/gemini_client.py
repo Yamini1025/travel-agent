@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 import google.generativeai as genai
+import json
 
 load_dotenv()
 
@@ -9,6 +10,54 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 genai.configure(api_key=GEMINI_API_KEY)
 
 model = genai.GenerativeModel("gemini-3.5-flash")
+
+def validate_preferences(dietary_preferences, attraction_preferences, preferences):
+    prompt = f"""
+    You are validating user input for a travel planning application.
+
+    Determine whether each field contains meaningful, relevant travel preferences.
+
+    DIETARY PREFERENCES:
+    {dietary_preferences}
+
+    ATTRACTION PREFERENCES:
+    {attraction_preferences}
+
+    GENERAL PREFERENCES:
+    {preferences}
+
+    Rules:
+    - Empty fields are valid because they are optional.
+    - Natural language is allowed.
+    - Specific preferences are allowed.
+    - Accept reasonable travel-related preferences.
+    - Reject random, nonsensical, gibberish, or clearly unrelated input.
+    - Do not reject a preference simply because it is unusual.
+    - Dietary preferences can include food restrictions, allergies, vegetarian, vegan, gluten-free, foods the user avoids, etc.
+    - Attraction preferences can include beaches, museums, hiking, shopping, nightlife, theme parks, historical sites, scenic views, etc.
+    - General preferences can include birthdays, anniversaries, preferred pace, transportation preferences, scheduling preferences, accessibility needs, etc.
+
+    Return ONLY valid JSON in exactly this format:
+
+    {{
+        "dietary_valid": true,
+        "dietary_message": "",
+        "attraction_valid": true,
+        "attraction_message": "",
+        "general_valid": false,
+        "general_message": "Please enter a meaningful travel preference."
+    }}
+
+    If any field is invalid, set its corresponding value to false and provide
+    a short helpful message explaining what needs to be changed.
+    """
+
+    response = model.generate_content(prompt)
+
+    result = response.text.strip()
+    result = result.replace("```json", "").replace("```", "").strip()
+
+    return json.loads(result)
 
 
 def generate_itinerary(trip, search_results):
