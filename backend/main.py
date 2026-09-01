@@ -10,9 +10,14 @@ from serpapi_client import (
     get_return_flight,
     validate_destination
 )
-from gemini_client import generate_itinerary
+from gemini_client import generate_itinerary, validate_preferences
 
 app = FastAPI()
+
+class PreferenceValidationRequest(BaseModel):
+    dietary_preferences: List[str]
+    attraction_preferences: List[str]
+    preferences: str
 
 
 class TripRequest(BaseModel):
@@ -40,6 +45,18 @@ class DestinationRequest(BaseModel):
 def validate_destination_endpoint(data: DestinationRequest):
     is_valid = validate_destination(data.destination)
     return {"valid": is_valid}
+
+@app.post("/api/validate-preferences")
+def validate_trip_preferences(data: PreferenceValidationRequest):
+    validation = validate_preferences(
+        data.dietary_preferences,
+        data.attraction_preferences,
+        data.preferences
+    )
+    return {
+        "success": True,
+        "validation": validation
+    }
 
 @app.post("/api/trips")
 def create_trip(trip: TripRequest):

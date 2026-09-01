@@ -19,6 +19,9 @@ const initialErrors = {
   startDate: '',
   endDate: '',
   budget: '',
+  dietaryPreferences: '',
+  attractionPreferences: '',
+  preferences: '',
 }
 
 function TripForm({ onSubmit, onClose }) {
@@ -42,6 +45,35 @@ function TripForm({ onSubmit, onClose }) {
 
     const data = await response.json();
     return data.valid;
+  }
+
+    function parsePreferences(value) {
+    return value
+      .split(',')
+      .map((item) => item.trim())
+      .filter(Boolean);
+  }
+
+  async function validatePreferences() {
+    const response = await fetch(
+      'http://localhost:8000/api/validate-preferences',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          dietary_preferences: parsePreferences(form.dietaryPreferences),
+          attraction_preferences: parsePreferences(form.attractionPreferences),
+          preferences: form.preferences,
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to validate preferences');
+    }
+
+    const data = await response.json();
+    return data.validation;
   }
 
   async function handleSubmit(e) {
@@ -83,10 +115,12 @@ function TripForm({ onSubmit, onClose }) {
     setIsValidating(true);
 
     try {
-      const [startPointValid, destinationValid] = await Promise.all([
-        checkPlaceIsValid(form.startPoint),
-        checkPlaceIsValid(form.destination),
-      ]);
+      const [startPointValid, destinationValid, preferenceValidation] =
+        await Promise.all([
+          checkPlaceIsValid(form.startPoint),
+          checkPlaceIsValid(form.destination),
+          validatePreferences(),
+        ]);
 
       const placeErrors = { ...newErrors };
 
@@ -96,15 +130,31 @@ function TripForm({ onSubmit, onClose }) {
       if (!destinationValid) {
         placeErrors.destination = "We couldn't find that destination. Try a city name.";
       }
+      if (!preferenceValidation.dietary_valid) {
+        placeErrors.dietaryPreferences = preferenceValidation.dietary_message;
+      }
 
-      if (!startPointValid || !destinationValid) {
+      if (!preferenceValidation.attraction_valid) {
+        placeErrors.attractionPreferences = preferenceValidation.attraction_message;
+      }
+
+      if (!preferenceValidation.general_valid) {
+        placeErrors.preferences = preferenceValidation.general_message;
+      }
+
+      if (
+        !startPointValid ||
+        !destinationValid ||
+        !preferenceValidation.dietary_valid ||
+        !preferenceValidation.attraction_valid ||
+        !preferenceValidation.general_valid
+      ) {
         setErrors(placeErrors);
         setIsValidating(false);
         return;
       }
 
       onSubmit(form);
-      setForm(initialForm);
       setErrors(initialErrors);
     } catch (error) {
       console.error('Destination validation error:', error);
