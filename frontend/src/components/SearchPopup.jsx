@@ -6,10 +6,10 @@ function SearchPopup() {
       <div className="search-popup">
         <div className="loading-spinner"></div>
 
-        <h2>Finding your options...</h2>
+        <h2>Finding the best flight and hotel options...</h2>
 
         <p>
-          We're searching for flights and hotels for your trip. Please give us a moment.
+          Please give us a moment.
         </p>
       </div>
     </div>
