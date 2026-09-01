@@ -73,7 +73,9 @@ def create_itinerary(data: ItineraryRequest):
     restaurants = data.restaurants
 
     return_flight = get_return_flight(
-        selected_flight["departure_token"]
+        trip["destination"],
+        trip["endDate"],
+        selected_flight["airline"]
     )
 
     selected_flight["return_flight"] = return_flight

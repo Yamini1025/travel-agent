@@ -44,26 +44,6 @@ def get_airport_id(destination):
                 if airports:
                     return airports[0].get("id")
 
-        if "," in destination:
-            broader_location = destination.split(",")[0].strip()
-
-            results = serpapi.search({
-                "engine": "google_flights_autocomplete",
-                "q": broader_location,
-                "gl": "us",
-                "hl": "en",
-                "api_key": SERPAPI_KEY,
-            })
-
-            suggestions = results.get("suggestions", [])
-
-            for suggestion in suggestions:
-                if suggestion.get("type") == "city":
-                    airports = suggestion.get("airports", [])
-
-                    if airports:
-                        return airports[0].get("id")
-
     return None
 
 def search_flights(destination, start_date, end_date):
@@ -117,21 +97,38 @@ def search_flights(destination, start_date, end_date):
     except Exception as e:
         print(f"Flight search error: {e}")
         return []
-
-def get_return_flight(departure_token):
+    
+def get_return_flight(destination, end_date, airline):
     try:
+        departure_id = get_airport_id(destination)
+
+        if not departure_id:
+            print(f"Could not find airport ID for destination: {destination}")
+            return None
+
         results = serpapi.search({
             "engine": "google_flights",
-            "departure_token": departure_token,
+            "departure_id": departure_id,
+            "arrival_id": "SFO",
+            "type": "2",
+            "outbound_date": end_date,
             "api_key": SERPAPI_KEY,
         })
 
         flights = results.get("best_flights", [])
 
-        if not flights:
+        # Find a return flight from the same airline
+        matching_flights = [
+            flight
+            for flight in flights
+            if flight.get("flights", [{}])[0].get("airline") == airline
+        ]
+
+        if not matching_flights:
+            print(f"No return flight found for airline: {airline}")
             return None
 
-        flight = flights[0]
+        flight = matching_flights[0]
         segments = flight.get("flights", [])
 
         if not segments:
@@ -151,6 +148,10 @@ def get_return_flight(departure_token):
             "arrival_airport": segments[-1]
                 .get("arrival_airport", {}).get("id")
         }
+
+    except Exception as e:
+        print(f"Return flight search error: {e}")
+        return None
 
     except Exception as e:
         print(f"Return flight search error: {e}")

@@ -52,6 +52,12 @@ def generate_itinerary(trip, search_results):
       3. Budget compatibility
       4. Geographic proximity to other activities
       5. Realistic timing and travel time
+    - For every activity, include an estimated duration for how long the traveler will spend there.
+    - For every activity after the first activity of the day, include an estimated travel time from the previous activity.
+    - Travel time should be realistic and account for walking, driving, public transportation, parking, and normal transitions.
+    - Use reasonable estimates based on the locations provided.
+    - For the first activity of each day, set "travel_time" to "N/A" unless there is a meaningful travel time from the previous day's location that should be included.
+    - Return duration and travel_time as simple strings such as "1 hour", "45 minutes", or "15 minutes".
 
     - Write all titles, descriptions, locations, and other text values in natural, polished, grammatically correct English. 
     - Use clear, conversational language that sounds like a helpful human travel planner. 
@@ -72,11 +78,13 @@ def generate_itinerary(trip, search_results):
                 "title": "...",
                 "activities": [
                     {{
-                    "time": "...",
-                    "type": "activity | attraction | restaurant",
-                    "title": "...",
-                    "description": "...",
-                    "location": "..."
+                        "time": "...",
+                        "type": "activity | attraction | restaurant",
+                        "title": "...",
+                        "description": "...",
+                        "location": "...",
+                        "duration": "...",
+                        "travel_time": "..."
                     }}
                 ]
             }}

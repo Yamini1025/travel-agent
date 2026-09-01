@@ -77,10 +77,15 @@ const selectedHotel = location.state?.selectedHotel || savedTrip?.selectedHotel;
                             key={index}
                             className="activity-view"
                         >
-                            <h4 className="activity-timestamp">
-                                [{activity.time}]
-                            </h4>
-
+                          <div className="activity-timestamp">
+                              <h4>{activity.time}</h4>
+                              {activity.travel_time && activity.travel_time !== "N/A" && (
+                                <span className="travel-time">
+                                  <span>Travel time:</span>
+                                  <span>{activity.travel_time}</span>
+                                </span>
+                              )}
+                          </div>
                             <div className="activity-details">
                                 <h4 className="activity-title">
                                     {activity.title}
