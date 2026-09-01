@@ -109,6 +109,33 @@
 
 .activity-timestamp {
     grid-column: span 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    min-width: 120px;
+}
+
+.activity-timestamp h4 {
+    margin: 0;
+}
+
+.travel-time {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1px;
+    color: #858ba1;
+    font-size: 12px;
+    font-family: Arial, sans-serif;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+.travel-time span {
+    font-style: italic;
 }
 
 .activity-details {
