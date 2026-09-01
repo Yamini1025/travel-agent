@@ -13,8 +13,18 @@ const initialForm = {
   preferences: '',
 }
 
+const initialErrors = {
+  startPoint: '',
+  destination: '',
+  startDate: '',
+  endDate: '',
+  budget: '',
+}
+
 function TripForm({ onSubmit, onClose }) {
   const [form, setForm] = useState(initialForm);
+  const [errors, setErrors] = useState(initialErrors);
+  const [isValidating, setIsValidating] = useState(false);
 
   function handleChange(e) {
     setForm({
@@ -23,15 +33,94 @@ function TripForm({ onSubmit, onClose }) {
     });
   }
 
-  function handleSubmit(e) {
+  async function checkPlaceIsValid(place) {
+    const response = await fetch('http://localhost:8000/api/validate-destination', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ destination: place }),
+    });
+
+    const data = await response.json();
+    return data.valid;
+  }
+
+  async function handleSubmit(e) {
     e.preventDefault();
-    onSubmit(form);
-    setForm(initialForm);
+
+    const newErrors = { ...initialErrors };
+
+    if (!form.startPoint.trim()) {
+      newErrors.startPoint = 'Please enter a starting point.';
+    }
+    
+    if (!form.destination.trim()) {
+      newErrors.destination = 'Please enter a destination.';
+    }
+    
+    if (!form.startDate) {
+      newErrors.startDate = 'Please select a start date.';
+    } else if (form.startDate < formattedToday) {
+      newErrors.startDate = 'Start date cannot be in the past.';
+    }
+    
+    if (!form.endDate) {
+      newErrors.endDate = 'Please select an end date.';
+    } else if (form.startDate && form.endDate < form.startDate) {
+      newErrors.endDate = 'End date must be after the start date.';
+    }
+    
+    if (!form.budget) {
+      newErrors.budget = 'Please select a budget.';
+    }
+
+    const hasBasicErrors = Object.values(newErrors).some(Boolean);
+
+    if (hasBasicErrors) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setIsValidating(true);
+
+    try {
+      const [startPointValid, destinationValid] = await Promise.all([
+        checkPlaceIsValid(form.startPoint),
+        checkPlaceIsValid(form.destination),
+      ]);
+
+      const placeErrors = { ...newErrors };
+
+      if (!startPointValid) {
+        placeErrors.startPoint = "We couldn't find that starting point. Try a city name.";
+      }
+      if (!destinationValid) {
+        placeErrors.destination = "We couldn't find that destination. Try a city name.";
+      }
+
+      if (!startPointValid || !destinationValid) {
+        setErrors(placeErrors);
+        setIsValidating(false);
+        return;
+      }
+
+      onSubmit(form);
+      setForm(initialForm);
+      setErrors(initialErrors);
+    } catch (error) {
+      console.error('Destination validation error:', error);
+      setErrors({
+        ...newErrors,
+        destination: 'Something went wrong checking that destination. Please try again.',
+      });
+    } finally {
+      setIsValidating(false);
+    }
   }
 
   function handleClear(e) {
     e.preventDefault();
     setForm(initialForm);
+    setErrors(initialErrors);
   }
 
   function handleTripTypeChange(value) {
@@ -46,8 +135,8 @@ function TripForm({ onSubmit, onClose }) {
     });
   }
 
-const today = new Date();
-const formattedToday = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+  const today = new Date();
+  const formattedToday = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
 
   return (
     <div
@@ -56,7 +145,7 @@ const formattedToday = `${today.getFullYear()}-${String(today.getMonth() + 1).pa
         event.target === event.currentTarget && onClose()
       }
     >
-      <form className="trip-form" onSubmit={handleSubmit}>
+      <form className="trip-form" onSubmit={handleSubmit} noValidate>
         <div className="form-heading">
           <div>
             <p className="eyebrow">BUILD SOMETHING MEMORABLE</p>
@@ -80,8 +169,8 @@ const formattedToday = `${today.getFullYear()}-${String(today.getMonth() + 1).pa
               value={form.startPoint}
               onChange={handleChange}
               placeholder="Where from?"
-              required
             />
+            {errors.startPoint && <span className="field-error">{errors.startPoint}</span>}
           </label>
           <label>
             Destination
@@ -90,8 +179,8 @@ const formattedToday = `${today.getFullYear()}-${String(today.getMonth() + 1).pa
               value={form.destination}
               onChange={handleChange}
               placeholder="Where to?"
-              required
             />
+            {errors.destination && <span className="field-error">{errors.destination}</span>}
           </label>
           <p className="location-note">
             Enter both locations as a city name or city name, state name.
@@ -106,8 +195,8 @@ const formattedToday = `${today.getFullYear()}-${String(today.getMonth() + 1).pa
               value={form.startDate}
               min={formattedToday}
               onChange={handleChange}
-              required
             />
+            {errors.startDate && <span className="field-error">{errors.startDate}</span>}
           </label>
           <label>
             End Date
@@ -117,17 +206,18 @@ const formattedToday = `${today.getFullYear()}-${String(today.getMonth() + 1).pa
               value={form.endDate}
               min={form.startDate}
               onChange={handleChange}
-              required
             />
+            {errors.endDate && <span className="field-error">{errors.endDate}</span>}
           </label>
           <label>
             Budget
-            <select name="budget" value={form.budget} onChange={handleChange} required>
+            <select name="budget" value={form.budget} onChange={handleChange}>
               <option value="" disabled>Select budget</option>
               <option>Budget-friendly</option>
               <option>Mid-range</option>
               <option>Luxury</option>
             </select>
+            {errors.budget && <span className="field-error">{errors.budget}</span>}
           </label>
         </div>
         <div className="trip-type-field">
@@ -184,8 +274,8 @@ const formattedToday = `${today.getFullYear()}-${String(today.getMonth() + 1).pa
           <button type="button" className="secondary-button" onClick={handleClear}>
             Clear Form
           </button>
-          <button className="primary-button" type="submit">
-            ✦ Enter
+          <button className="primary-button" type="submit" disabled={isValidating}>
+            {isValidating ? 'Checking...' : '✦ Enter'}
           </button>
         </div>
       </form>

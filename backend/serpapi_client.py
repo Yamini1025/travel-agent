@@ -266,6 +266,22 @@ def search_restaurants(destination, dietary_preferences=None):
         print(f"Restaurant search error: {e}")
         return []
 
+def validate_destination(destination):
+    try:
+        results = serpapi.search({
+            "engine": "google_flights_autocomplete",
+            "q": destination,
+            "gl": "us",
+            "hl": "en",
+            "api_key": SERPAPI_KEY,
+        })
+
+        suggestions = results.get("suggestions", [])
+
+        return len(suggestions) > 0
+    except Exception as e:
+        print(f"Destination validation error: {e}")
+        return False
 
 
         

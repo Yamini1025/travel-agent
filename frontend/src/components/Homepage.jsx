@@ -78,6 +78,10 @@ function Homepage({ trips, setTrips }) {
           id: `${destination}-${Date.now()}`,
           title: destination,
           dates,
+          flights: data.flights,
+          hotels: data.hotels,
+          attractions: data.attractions,
+          restaurants: data.restaurants,
         };
       
       setSelectedTrip(newTrip);
