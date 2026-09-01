@@ -118,6 +118,13 @@
 	font-weight: 700;
 }
 
+.location-note {
+  font-size: 11px;
+  color: #858ba1;
+  margin-top: -5px;
+  line-height: 1.4;
+}
+
 .checkbox-group {
 	display: flex;
 	gap: 12px;
