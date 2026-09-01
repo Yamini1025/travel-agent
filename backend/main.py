@@ -7,7 +7,8 @@ from serpapi_client import (
     search_hotels,
     search_attractions,
     search_restaurants,
-    get_return_flight
+    get_return_flight,
+    validate_destination
 )
 from gemini_client import generate_itinerary
 
@@ -31,6 +32,14 @@ class ItineraryRequest(BaseModel):
     selected_hotel: dict
     attractions: list
     restaurants: list
+
+class DestinationRequest(BaseModel):
+    destination: str
+
+@app.post("/api/validate-destination")
+def validate_destination_endpoint(data: DestinationRequest):
+    is_valid = validate_destination(data.destination)
+    return {"valid": is_valid}
 
 @app.post("/api/trips")
 def create_trip(trip: TripRequest):
