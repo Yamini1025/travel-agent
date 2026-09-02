@@ -110,7 +110,7 @@ cd frontend
 npm install
 npm run dev
 
-The frontend expects the backend running at `${import.meta.env.VITE_API_BASE_URL}`.
+The frontend expects the backend running at `${import.meta.env.API_BASE_URL}`.
 
 ---
 
