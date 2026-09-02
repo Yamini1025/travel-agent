@@ -37,7 +37,7 @@ function TripForm({ onSubmit, onClose }) {
   }
 
   async function checkPlaceIsValid(place) {
-    const response = await fetch('http://localhost:8000/api/validate-destination', {
+    const response = await fetch(`${import.meta.env.API_BASE_URL}/api/validate-destination`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ destination: place }),
@@ -56,7 +56,7 @@ function TripForm({ onSubmit, onClose }) {
 
   async function validatePreferences() {
     const response = await fetch(
-      'http://localhost:8000/api/validate-preferences',
+      `${import.meta.env.API_BASE_URL}/api/validate-preferences`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

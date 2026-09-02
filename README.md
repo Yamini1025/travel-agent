@@ -110,7 +110,7 @@ cd frontend
 npm install
 npm run dev
 
-The frontend expects the backend running at `http://localhost:8000`.
+The frontend expects the backend running at `${import.meta.env.API_BASE_URL}`.
 
 ---
 

@@ -27,9 +27,9 @@ function TripSelection({setTrips}) {
 
     try {
       const { flights, hotels, attractions: tripAttractions, restaurants: tripRestaurants, ...tripForPrompt } = trip;
-
+      
       const response = await fetch(
-        'http://localhost:8000/api/generate-itinerary',
+        `${import.meta.env.API_BASE_URL}/api/generate-itinerary`,
         {
           method: 'POST',
           headers: {
