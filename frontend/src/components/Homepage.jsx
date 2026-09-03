@@ -45,7 +45,7 @@ function Homepage({ trips, setTrips }) {
     setShowSearchPopup(true);
 
     try {
-      const response = await fetch(`${import.meta.env.API_BASE_URL}/api/trips`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/trips`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
