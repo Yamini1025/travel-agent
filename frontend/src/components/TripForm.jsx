@@ -24,8 +24,6 @@ const initialErrors = {
   preferences: '',
 }
 
-console.log("API URL:", import.meta.env.VITE_API_BASE_URL);
-
 function TripForm({ onSubmit, onClose }) {
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState(initialErrors);
