@@ -82,7 +82,7 @@ The frontend never talks to third-party APIs directly - every external call (Ser
 
 ---
 
-## ⚙️ Setup & Installation
+## ⚙️ Local Development
 
 ### Prerequisites
 - Python 3.10+
