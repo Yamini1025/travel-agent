@@ -24,7 +24,7 @@ const initialErrors = {
   preferences: '',
 }
 
-console.log("API URL:", import.meta.env.API_BASE_URL);
+console.log("API URL:", import.meta.env.VITE_API_BASE_URL);
 
 function TripForm({ onSubmit, onClose }) {
   const [form, setForm] = useState(initialForm);
@@ -39,7 +39,7 @@ function TripForm({ onSubmit, onClose }) {
   }
 
   async function checkPlaceIsValid(place) {
-    const response = await fetch(`${import.meta.env.API_BASE_URL}/api/validate-destination`, {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/validate-destination`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ destination: place }),
@@ -58,7 +58,7 @@ function TripForm({ onSubmit, onClose }) {
 
   async function validatePreferences() {
     const response = await fetch(
-      `${import.meta.env.API_BASE_URL}/api/validate-preferences`,
+      `${import.meta.env.VITE_API_BASE_URL}/api/validate-preferences`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
